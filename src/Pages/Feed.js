@@ -1,0 +1,27 @@
+import {Box, Button, Container, Heading, Stack, StackDivider} from "@chakra-ui/react";
+import NoteCard from "../Components/NoteCard";
+import NoteInput from "../Components/NoteInput";
+
+const Feed = ({user, setUser, notes, newNote, setNewNote, handleSubmit}) => {
+  const handleLogout = ()=>{
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
+  }
+  return ( 
+    <Container paddingTop='10' maxW ='2xl'>
+      
+      <Stack divider={<StackDivider />} spacing='4'>
+      <Box>
+      <Heading>Hi {user.name}</Heading>
+     
+      </Box>
+      <Button onClick={handleLogout}>Logout</Button>
+      <NoteInput newNote ={newNote} setNewNote ={setNewNote} handleSubmit ={handleSubmit} />
+      {notes.map((note => <NoteCard key ={note.id} note ={note}/>)) }
+    
+    </Stack>
+    </Container>
+   );
+}
+ 
+export default Feed;
