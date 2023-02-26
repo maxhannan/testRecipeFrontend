@@ -2,7 +2,6 @@ import { Container, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Feed from "./Pages/Feed";
 import Login from "./Pages/Login";
-import NoteFetch from "./Utils/NoteFetch";
 import noteService from './Utils/NoteFetch'
 
 function App() {
