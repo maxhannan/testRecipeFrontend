@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/react";
+import { Container, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Feed from "./Pages/Feed";
 import Login from "./Pages/Login";
@@ -9,14 +9,17 @@ function App() {
   const [user, setUser] = useState(null)
   const [notes, setNotes] = useState([]) 
   const [newNote, setNewNote] = useState('')
-  const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+  const [userloading, setuserLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
+  
   useEffect(() => {
-    
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      console.log()
+      setuserLoading(false)
     }
+    setuserLoading(false)
   }, [])
   
   useEffect(() => {
@@ -26,7 +29,8 @@ function App() {
         console.log(user)
         noteService
         .getAll(user.token).then(initialNotes => {
-          setNotes(initialNotes)
+          setNotes(initialNotes.reverse())
+          setLoading(false)
         })
     }
    
@@ -40,9 +44,21 @@ function App() {
     }
     const returnedNote = await noteService.create(newNoteObj)
     console.log(returnedNote)
-    setNotes(notes.concat(returnedNote))
+    let notesCopy = [...notes]
+    notesCopy.unshift(returnedNote)
+    setNotes(notesCopy)
     setNewNote('')
   }
+
+  if(userloading){
+    return (
+      <Container padding='20%'>
+<Spinner size='lg' />
+      </Container>
+      
+    )
+  }
+  
   return (
     <div className="App">
       <Container maxW='90%'  centerContent>
@@ -50,7 +66,8 @@ function App() {
          <Feed 
          user = {user} setUser ={setUser} 
          notes ={notes} newNote ={newNote} 
-         setNewNote ={setNewNote} handleSubmit ={handleSubmit}/> 
+         setNewNote ={setNewNote} handleSubmit ={handleSubmit}
+         loading={loading}/> 
          :
           <Login setUser={setUser}/>}
       </Container>
