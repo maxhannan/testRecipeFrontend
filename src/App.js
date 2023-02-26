@@ -53,7 +53,7 @@ function App() {
   if(userloading){
     return (
       <Container padding='20%'>
-<Spinner size='lg' />
+        <Spinner size='lg' />
       </Container>
       
     )
